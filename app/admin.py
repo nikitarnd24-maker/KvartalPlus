@@ -31,7 +31,7 @@ class PropertyAdmin(admin.ModelAdmin):
     # Обязательно включаем поле deal_type в форму
     fields = (
         'title',
-        'deal_type',         # ← вот оно!
+        'deal_type',         
         'property_type',
         'address',
         'price',

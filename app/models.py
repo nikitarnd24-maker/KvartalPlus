@@ -83,7 +83,7 @@ class TeamMember(models.Model):
         verbose_name="Порядок отображения"
     )
     
-    # Добавляем поле для ссылки на аттестат
+    # поле для ссылки на аттестат
     certificate_link = models.URLField(
         max_length=500,
         verbose_name="Ссылка на аттестат",
@@ -100,7 +100,7 @@ class TeamMember(models.Model):
     def __str__(self):
         return f"{self.name} - {self.position}"
     
-    # Добавим метод для проверки наличия аттестата
+    # метод для проверки наличия аттестата
     def has_certificate(self):
         return bool(self.certificate_link)
     has_certificate.short_description = "Есть аттестат"
@@ -109,7 +109,7 @@ class TeamMember(models.Model):
     class Meta:
         verbose_name = "Сотрудник"
         verbose_name_plural = "Сотрудники"
-        ordering = ['order', 'name']  # Сортировка по порядку, затем по имени
+        ordering = ['order', 'name']  
 
 class Property(models.Model):
     PROPERTY_TYPES = [
@@ -235,13 +235,13 @@ class Property(models.Model):
         related_name='properties'
     )
     
-    # НОВОЕ ПОЛЕ - тип сделки
+    # тип сделки
     deal_type = models.CharField(
         max_length=10,
         choices=DEAL_TYPES,
         verbose_name="Тип сделки",
-        default='sale',  # По умолчанию "Продажа"
-        blank=False      # Не разрешать пустое значение
+        default='sale',  
+        blank=False      
     )
     
     def __str__(self):

@@ -281,7 +281,7 @@ def catalog(request):
         'property_count': properties.count(),
         'form': form,
         'active_filters': request.GET,
-        'title': 'Каталог - Агентство недвижимости Квартал+',  # Добавили title
+        'title': 'Каталог - Агентство недвижимости Квартал+',  
     }
     
     return render(request, 'app/catalog.html', context)
@@ -342,7 +342,7 @@ def apply_filters(queryset, filters):
     if has_images:
         queryset = queryset.filter(images__isnull=False).distinct()
 
-    if deal_type in ['sale', 'rent']:  # ✅ Только корректные значения
+    if deal_type in ['sale', 'rent']:  
         queryset = queryset.filter(deal_type=deal_type)
 
     try:
@@ -409,7 +409,7 @@ def extract_property_data(request):
     return {
         'title': request.POST.get('title'),
         'property_type': request.POST.get('property_type'),
-        'deal_type': request.POST.get('deal_type'),  # ✅ Тип сделки
+        'deal_type': request.POST.get('deal_type'), 
         'address': request.POST.get('address'),
         'price': request.POST.get('price'),
         'area': request.POST.get('area'),
@@ -427,7 +427,7 @@ def create_property_object(data):
     return Property.objects.create(
         title=data['title'],
         property_type=data['property_type'],
-        deal_type=data['deal_type'],  # ✅ Сохраняем deal_type
+        deal_type=data['deal_type'], 
         address=data['address'],
         price=data['price'],
         area=data['area'],
@@ -537,7 +537,7 @@ def edit_property(request, property_id):
     
     if request.method == 'POST':
         try:
-            # Обновляем основные данные объекта
+            # основные данные объекта
             property_obj.title = request.POST.get('title')
             property_obj.property_type = request.POST.get('property_type')
             property_obj.address = request.POST.get('address')
@@ -548,7 +548,7 @@ def edit_property(request, property_id):
             property_obj.description = request.POST.get('description')
             property_obj.is_featured = 'is_featured' in request.POST
             
-            # ОБРАБОТКА ТИПА СДЕЛКИ (добавить эту часть)
+            # ОБРАБОТКА ТИПА СДЕЛКИ 
             deal_type = request.POST.get('deal_type')
             if deal_type in ['sale', 'rent']:
                 property_obj.deal_type = deal_type
@@ -662,11 +662,10 @@ def delete_property_image(request, image_id):
 def set_main_image(request, image_id):
     """Установка фотографии как главной."""
     try:
-        # Получаем изображение
+        # изображение
         image = get_object_or_404(PropertyImage, id=image_id)
         property_id = image.property.id
-        
-        # Проверяем права (только суперпользователь)
+       
         if not request.user.is_superuser:
             messages.error(request, "У вас нет прав для изменения главной фотографии")
             return redirect('edit_property', property_id=property_id)
