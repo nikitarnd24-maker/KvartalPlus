@@ -1,0 +1,359 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    .property-gallery {
+        position: relative;
+    }
+
+    .carousel-property {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 15px;
+    }
+
+        .carousel-property img {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+        }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0,0,0,0.5);
+        border-radius: 50%;
+        margin: 0 10px;
+    }
+
+    .thumbnail-container {
+        display: flex;
+        gap: 8px;
+        margin-top: 15px;
+        overflow-x: auto;
+        padding-bottom: 5px;
+        scrollbar-width: thin;
+    }
+
+    .thumbnail {
+        width: 80px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+        flex-shrink: 0;
+    }
+
+        .thumbnail:hover {
+            transform: scale(1.05);
+        }
+
+        .thumbnail.active {
+            border-color: #dc3545;
+            box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+        }
+
+    .property-info-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border: none;
+    }
+
+    .price-badge {
+        font-size: 28px;
+        font-weight: bold;
+        color: #dc3545;
+    }
+
+    .agent-card {
+        border-left: 4px solid #dc3545;
+        transition: transform 0.3s;
+        border: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+        .agent-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .property-feature {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    .feature-icon {
+        width: 40px;
+        height: 40px;
+        background: #dc3545;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        flex-shrink: 0;
+        font-size: 18px;
+    }
+
+    .contact-form {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 768px) {
+        .carousel-property img {
+            height: 300px;
+        }
+
+        .thumbnail {
+            width: 70px;
+            height: 50px;
+        }
+
+        .price-badge {
+            font-size: 24px;
+        }
+    }
+</style>
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none">Главная</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog' %}" class="text-decoration-none">Каталог</a></li>
+            <li class="breadcrumb-item active">{{ property.title|truncatechars:30 }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+            <!-- Галерея -->
+            <div class="property-gallery">
+                {% if images %}
+                <!-- Главное фото -->
+                <div class="main-photo mb-3">
+                    <img src="{{ property.get_main_image_url }}"
+                         class="img-fluid rounded w-100"
+                         alt="{{ property.title }}"
+                         style="height: 500px; object-fit: cover;"
+                         onerror="this.src='{% static 'app/content/real_estate1.jpg' %}'">
+                </div>
+
+                <!-- Карусель для остальных фото (если их больше 1) -->
+                {% if images|length > 1 %}
+                <div id="propertyCarousel" class="carousel slide carousel-property" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for image in images %}
+                        {% if not image.is_main %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <img src="{{ image.image.url }}"
+                                 class="d-block w-100"
+                                 alt="{{ property.title }} - фото {{ forloop.counter }}"
+                                 style="height: 200px; object-fit: cover;"
+                                 onerror="this.src='{% static 'app/content/real_estate1.jpg' %}'">
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Предыдущее</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Следующее</span>
+                    </button>
+                </div>
+                {% endif %}
+
+                {% else %}
+                <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 400px;">
+                    <div class="text-center text-muted">
+                        <i class="fas fa-home fa-4x mb-3"></i>
+                        <h4>Нет фотографий</h4>
+                        <p class="small">Фотографии пока не добавлены</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Заголовок и цена -->
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h1 class="h2 mb-2">{{ property.title }}</h1>
+                    <p class="text-muted mb-0"><i class="fas fa-map-marker-alt text-danger me-1"></i> {{ property.address }}</p>
+                </div>
+                <div class="text-end">
+                    <div class="price-badge">{{ property.price|floatformat:0 }} ₽</div>
+                    {% if property.is_featured %}
+                    <span class="badge bg-warning text-dark"><i class="fas fa-star"></i> Премиум</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Описание -->
+            <div class="card property-info-card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-3"><i class="fas fa-file-alt text-danger me-2"></i>Описание</h4>
+                    <div class="card-text">{{ property.description|linebreaks }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Характеристики -->
+            <div class="card property-info-card mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> Характеристики</h5>
+                </div>
+                <div class="card-body">
+                    <div class="property-feature">
+                        <div class="feature-icon"><i class="fas fa-ruler-combined"></i></div>
+                        <div><strong>Площадь</strong><div>{{ property.area }} м²</div></div>
+                    </div>
+                    <div class="property-feature">
+                        <div class="feature-icon"><i class="fas fa-bed"></i></div>
+                        <div><strong>Комнат</strong><div>{{ property.rooms }}</div></div>
+                    </div>
+                    {% if property.floor %}
+                    <div class="property-feature">
+                        <div class="feature-icon"><i class="fas fa-building"></i></div>
+                        <div><strong>Этаж</strong><div>{{ property.floor }}</div></div>
+                    </div>
+                    {% endif %}
+                    <div class="property-feature">
+                        <div class="feature-icon"><i class="fas fa-home"></i></div>
+                        <div><strong>Тип</strong><div>{{ property.get_property_type_display }}</div></div>
+                    </div>
+                    <div class="property-feature">
+                        <div class="feature-icon"><i class="fas {% if property.deal_type == 'sale' %}fa-tag{% else %}fa-key{% endif %}"></i></div>
+                        <div><strong>Тип сделки</strong><div>{% if property.deal_type == 'sale' %}Продажа{% else %}Аренда{% endif %}</div></div>
+                    </div>
+                    <div class="property-feature">
+                        <div class="feature-icon"><i class="fas fa-calendar-alt"></i></div>
+                        <div><strong>Добавлено</strong><div>{{ property.created_at|date:"d.m.Y" }}</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Агент -->
+            <div class="card agent-card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3"><i class="fas fa-user-tie text-danger me-2"></i>{% if property.agent %}Ваш агент{% else %}Контакты{% endif %}</h5>
+                    {% if property.agent %}
+                    <div class="text-center mb-3">
+                        {% if property.agent.photo %}
+                        <img src="{{ property.agent.photo.url }}" class="rounded-circle mb-3" style="width:100px;height:100px;object-fit:cover;">
+                        {% else %}
+                        <div class="rounded-circle bg-danger text-white d-inline-flex align-items-center justify-content-center mb-3" style="width:100px;height:100px;">
+                            <i class="fas fa-user-tie fa-3x"></i>
+                        </div>
+                        {% endif %}
+                        <h5>{{ property.agent.name }}</h5>
+                        <p class="text-muted">{{ property.agent.position }}</p>
+                        <div class="row mb-3">
+                            <div class="col-6 text-center">
+                                <div class="fs-4 text-danger">{{ property.agent.experience }}</div>
+                                <small class="text-muted">лет опыта</small>
+                            </div>
+                            <div class="col-6 text-center">
+                                <div class="fs-4 text-danger">{{ property.agent.deals_completed }}</div>
+                                <small class="text-muted">сделок</small>
+                            </div>
+                        </div>
+                        <div class="contact-info">
+                            <p class="mb-2"><i class="fas fa-phone text-danger me-2"></i><a href="tel:{{ property.agent.phone }}">{{ property.agent.phone }}</a></p>
+                            <p class="mb-0"><i class="fas fa-envelope text-danger me-2"></i><a href="mailto:{{ property.agent.email }}">{{ property.agent.email }}</a></p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="text-center">
+                        <div class="text-muted mb-3"><i class="fas fa-building fa-3x"></i></div>
+                        <h5>Агентство недвижимости "Квартал+"</h5>
+                        <p class="text-muted mb-3">Свяжитесь с нами для консультации по этому объекту</p>
+                        <div class="contact-info">
+                            <p class="mb-2"><i class="fas fa-phone text-danger me-2"></i>+7 (992) 299-15-29</p>
+                            <p class="mb-2"><i class="fas fa-envelope text-danger me-2"></i>info@kvartal-plus.ru</p>
+                            <p class="mb-0"><i class="fas fa-clock text-danger me-2"></i>Пн-Пт: 10:00-18:00</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="text-center mt-3">
+                        <a href="{% url 'team' %}" class="btn btn-outline-danger btn-sm"><i class="fas fa-users me-1"></i> Вся команда</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Форма -->
+            <div class="contact-form mb-4">
+                <h5 class="mb-3"><i class="fas fa-comment-alt text-danger me-2"></i> Заинтересовались?</h5>
+                <p class="text-muted mb-3">Заполните форму, и мы свяжемся с вами в течение 15 минут</p>
+                <form method="post" action="{% url 'contact' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="property" value="{{ property.title }}">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="name" placeholder="Ваше имя" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="tel" class="form-control" name="phone" placeholder="Ваш телефон" required>
+                    </div>
+                    <div class="mb-3">
+                        <textarea class="form-control" name="message" rows="3" placeholder="Сообщение (необязательно)">{{ property.title }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-danger w-100"><i class="fas fa-paper-plane me-1"></i> Отправить заявку</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if user.is_superuser %}
+<div class="container mt-3 mb-4">
+    <div class="alert alert-info">
+        <div class="d-flex justify-content-between align-items-center">
+            <div><i class="fas fa-tools"></i> <strong>Управление объектом</strong></div>
+            <div class="btn-group">
+                <a href="{% url 'edit_property' property.id %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Редактировать</a>
+                <a href="{% url 'delete_property' property.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Вы уверены?');"><i class="fas fa-trash"></i> Удалить</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+    function showSlide(index) {
+        const carousel = new bootstrap.Carousel(document.getElementById('propertyCarousel'));
+        carousel.to(index);
+        document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+            thumb.classList.toggle('active', i === index);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const carousel = document.getElementById('propertyCarousel');
+        if (carousel) {
+            carousel.addEventListener('slid.bs.carousel', function (event) {
+                const activeIndex = event.to;
+                document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+                    thumb.classList.toggle('active', i === activeIndex);
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}

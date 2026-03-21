@@ -1,0 +1,395 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <!-- Герой-секция -->
+    <div class="row align-items-center mb-5">
+        <div class="col-md-6">
+            <!-- Заголовок -->
+            <div class="mb-4">
+                <h1 class="display-5 fw-bold text-burgundy mb-1">Агентство недвижимости «Квартал+»</h1>
+                <p class="text-muted">Ваш надежный гид в мире недвижимости</p>
+                <p class="text-muted">На рынке с 2011 года</p>
+            </div>
+
+            <p class="fs-5 mb-4">
+                С 2011 года мы помогаем клиентам безопасно и выгодно осуществлять сделки с недвижимостью в Пскове. Каждый наш сотрудник имеет аттестат с подтвержденной квалификацией "Специалист по недвижимости - Агент", выданный территориальным органом по сертификации брокерских услуг ассоциации риэлторов Санкт-Петербурга и Ленинградской области. Мы — больше чем агентство. Мы — партнер, который берет на себя всю сложность сделки, чтобы вы могли принимать решения со спокойной уверенностью.
+            </p>
+
+            <div class="d-flex gap-3 mt-4">
+                <div class="text-center">
+                    <div class="fs-1 fw-bold text-burgundy">15+</div>
+                    <div class="text-muted">лет опыта</div>
+                </div>
+                <div class="text-center">
+                    <div class="fs-1 fw-bold text-burgundy">1000+</div>
+                    <div class="text-muted">довольных клиентов</div>
+                </div>
+                <div class="text-center">
+                    <div class="fs-1 fw-bold text-burgundy">100%</div>
+                    <div class="text-muted">юридическая безопасность</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="position-relative">
+                <img src="{% static 'app/content/office.jpg' %}"
+                     class="img-fluid rounded-4 shadow" alt="Наш офис"
+                     style="max-height: 400px; object-fit: cover;">
+                <div class="position-absolute bottom-0 start-0 bg-burgundy text-white p-3 m-3 rounded">
+                    <i class="fas fa-map-marker-alt me-2"></i> г. Псков, ул. Владимирская, 3в
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .border-burgundy {
+            border-color: #78191A !important;
+        }
+
+        .text-burgundy {
+            color: #78191A !important;
+        }
+
+        .bg-burgundy {
+            background-color: #78191A !important;
+        }
+
+        /* Новые стили для выделения блоков */
+        .feature-card {
+            border: 2px solid #e0e0e0;
+            border-top: 4px solid #78191A;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+            .feature-card:hover {
+                border-color: #78191A;
+                box-shadow: 0 5px 20px rgba(120, 25, 26, 0.15);
+                transform: translateY(-5px);
+            }
+
+        .feature-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #f0f0f0 100%);
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .benefit-block {
+            background: white;
+            border: 2px solid #78191A;
+            box-shadow: 0 3px 15px rgba(120, 25, 26, 0.1);
+            transition: all 0.3s ease;
+        }
+
+            .benefit-block:hover {
+                box-shadow: 0 8px 25px rgba(120, 25, 26, 0.2);
+                transform: translateY(-3px);
+            }
+
+        .benefit-title {
+            position: relative;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+            .benefit-title:after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 60px;
+                height: 2px;
+                background: #78191A;
+            }
+    </style>
+
+    <!-- Полный цикл услуг -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4 text-burgundy">Полный цикл услуг для любого объекта:</h2>
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 feature-card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-burgundy mb-3">Новостройки и переуступки прав</h5>
+                            <p class="card-text text-muted">Покупка у застройщиков и на первичном рынке</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 feature-card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-burgundy mb-3">Вторичное жилье</h5>
+                            <p class="card-text text-muted">Готовые квартиры и дома на вторичном рынке</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 feature-card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-burgundy mb-3">Коммерческая недвижимость</h5>
+                            <p class="card-text text-muted">Офисы, магазины, производственные помещения</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 feature-card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-burgundy mb-3">Земельные участки</h5>
+                            <p class="card-text text-muted">Участки под ИЖС, дачные, сельхоз назначения</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <div class="bg-light rounded p-4 border-start border-4 border-burgundy">
+                    <p class="lead mb-0">
+                        <strong>Нас рекомендуют за прозрачность, безопасность и спокойствие, которое мы привносим в один из самых важных этапов вашей жизни.</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Мы делаем процесс максимально комфортным -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4 text-burgundy">Мы делаем процесс максимально комфортным:</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 benefit-block">
+                        <div class="card-header feature-header text-center">
+                            <h5 class="card-title text-burgundy mb-0">Покупаем вместе:</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-3 d-flex align-items-start">
+                                    <i class="fas fa-check-circle text-burgundy me-2 mt-1"></i>
+                                    <span>Специальные ипотечные программы</span>
+                                </li>
+                                <li class="mb-3 d-flex align-items-start">
+                                    <i class="fas fa-check-circle text-burgundy me-2 mt-1"></i>
+                                    <span>Электронный документооборот</span>
+                                </li>
+                                <li class="d-flex align-items-start">
+                                    <i class="fas fa-check-circle text-burgundy me-2 mt-1"></i>
+                                    <span>Помощь в получении налогового вычета (до 650 000 ₽)</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 benefit-block">
+                        <div class="card-header feature-header text-center">
+                            <h5 class="card-title text-burgundy mb-0">Продаем выгодно:</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-3 d-flex align-items-start">
+                                    <i class="fas fa-check-circle text-burgundy me-2 mt-1"></i>
+                                    <span>Продажа новостроек <strong>без комиссии</strong> напрямую от застройщиков</span>
+                                </li>
+                                <li class="d-flex align-items-start">
+                                    <i class="fas fa-check-circle text-burgundy me-2 mt-1"></i>
+                                    <span>Мощная рекламная кампания для вашего объекта за наш счет</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 benefit-block">
+                        <div class="card-header feature-header text-center">
+                            <h5 class="card-title text-burgundy mb-0">Сопровождаем на 100%:</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-3 d-flex align-items-start">
+                                    <i class="fas fa-check-circle text-burgundy me-2 mt-1"></i>
+                                    <span>Полное юридическое и организационное сопровождение</span>
+                                </li>
+                                <li class="d-flex align-items-start">
+                                    <i class="fas fa-check-circle text-burgundy me-2 mt-1"></i>
+                                    <span>Мы берем на себя все заботы — от подготовки документов до передачи ключей</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Блок "Почему выбирают «Квартал+»?" -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4 text-burgundy">Почему более 1000 клиентов доверили нам свои сделки?</h2>
+
+            <div class="row">
+                <!-- Экспертиза и надежность -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 benefit-block">
+                        <div class="card-header feature-header text-center">
+                            <h4 class="card-title text-burgundy mb-0 benefit-title">Экспертиза и надежность</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-3 d-flex align-items-start">
+                                    <div class="me-2">
+                                        <i class="fas fa-check text-burgundy"></i>
+                                    </div>
+                                    <div>
+                                        <strong>15 лет</strong> лидерства на рынке Пскова
+                                    </div>
+                                </li>
+                                <li class="mb-3 d-flex align-items-start">
+                                    <div class="me-2">
+                                        <i class="fas fa-check text-burgundy"></i>
+                                    </div>
+                                    <div>
+                                        <strong>№1</strong> по объему продаж новостроек и вторичного жилья
+                                    </div>
+                                </li>
+                                <li class="d-flex align-items-start">
+                                    <div class="me-2">
+                                        <i class="fas fa-check text-burgundy"></i>
+                                    </div>
+                                    <div>
+                                        <strong>Полный спектр</strong> услуг «под ключ»
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Выгода и поддержка -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 benefit-block">
+                        <div class="card-header feature-header text-center">
+                            <h4 class="card-title text-burgundy mb-0 benefit-title">Выгода и поддержка</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-3 d-flex align-items-start">
+                                    <div class="me-2">
+                                        <i class="fas fa-check text-burgundy"></i>
+                                    </div>
+                                    <div>
+                                        <strong>Бесплатные сервисы:</strong> юридическое сопровождение, помощь с налоговым вычетом, выезд на показы на нашем авто
+                                    </div>
+                                </li>
+                                <li class="mb-3 d-flex align-items-start">
+                                    <div class="me-2">
+                                        <i class="fas fa-check text-burgundy"></i>
+                                    </div>
+                                    <div>
+                                        <strong>Система бонусов:</strong> Скидка 20 000 ₽ за рекомендацию, до 2% на встречную покупку, приоритет у застройщиков
+                                    </div>
+                                </li>
+                                <li class="d-flex align-items-start">
+                                    <div class="me-2">
+                                        <i class="fas fa-check text-burgundy"></i>
+                                    </div>
+                                    <div>
+                                        <strong>Для инвесторов:</strong> «Готовые решения» — меблировка от 224 000 ₽ за 5 дней и сдача «под ключ»
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Комфорт и технологии -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 benefit-block">
+                        <div class="card-header feature-header text-center">
+                            <h4 class="card-title text-burgundy mb-0 benefit-title">Комфорт и технологии</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-3 d-flex align-items-start">
+                                    <div class="me-2">
+                                        <i class="fas fa-check text-burgundy"></i>
+                                    </div>
+                                    <div>
+                                        <strong>Цифровые решения:</strong> Онлайн-сервисы и электронный документооборот для дистанционных сделок
+                                    </div>
+                                </li>
+                                <li class="mb-3 d-flex align-items-start">
+                                    <div class="me-2">
+                                        <i class="fas fa-check text-burgundy"></i>
+                                    </div>
+                                    <div>
+                                        <strong>Гарантия безопасности:</strong> Юридическая и финансовая защищенность каждой сделки
+                                    </div>
+                                </li>
+                                <li class="d-flex align-items-start">
+                                    <div class="me-2">
+                                        <i class="fas fa-check text-burgundy"></i>
+                                    </div>
+                                    <div>
+                                        <strong>Персональный менеджер:</strong> Один специалист ведет сделку от первого звонка до получения ключей
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Философия -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body text-center py-5">
+                    <h3 class="text-burgundy mb-4">Наша философия</h3>
+                    <p class="lead mb-0">
+                        Мы тщательно подходим к каждому случаю, предварительно изучаем все документы и гарантируем нашим клиентам только положительный результат. <strong>Доверьте недвижимость профессионалам!</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Призыв к действию -->
+    <div class="row mb-5">
+        <div class="col-12 text-center bg-burgundy text-white py-5 rounded">
+            <h2 class="mb-3">Готовы найти свой идеальный дом?</h2>
+            <p class="lead mb-4">Наши специалисты помогут вам на каждом этапе сделки</p>
+            <a href="{% url 'contact' %}" class="btn btn-light btn-lg me-3">Связаться с нами</a>
+            <a href="{% url 'catalog' %}" class="btn btn-outline-light btn-lg">Смотреть каталог</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .border-burgundy {
+        border-color: #78191A !important;
+    }
+
+    .text-burgundy {
+        color: #78191A !important;
+    }
+
+    .bg-burgundy {
+        background-color: #78191A !important;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        .display-5 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+{% endblock %}

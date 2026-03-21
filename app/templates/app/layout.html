@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Отключаем синюю подсветку телефона на iOS/Android -->
+    <meta name="format-detection" content="telephone=no">
+    <title>{{ title }} - Агентство недвижимости Квартал+</title>
+    {% load static %}
+
+    <link rel="icon" type="image/x-icon" href="{% static 'app/content/favicon.ico' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Старые стили (если нужны) -->
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
+    <!-- Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            padding-top: 120px; /* Увеличили отступ для новой шапки */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Верхняя белая полоса с логотипом и авторизацией */
+        .top-header {
+            background-color: white;
+            border-bottom: 1px solid #eaeaea;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030;
+            padding: 10px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+            .logo-section img {
+                width: 80px;
+                height: 55px;
+                border-radius: 8px;
+                transition: transform 0.3s ease;
+            }
+
+                .logo-section img:hover {
+                    transform: scale(1.05);
+                }
+
+        .company-name {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .company-name h5 {
+                margin: 0;
+                color: #2c3e50;
+                font-weight: 700;
+            }
+
+            .company-name small {
+                color: #7f8c8d;
+                font-size: 0.85em;
+            }
+
+        .auth-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Основная навигация - ТЕПЕРЬ КРАСНЫЙ КАК ФУТЕР */
+        .main-navigation {
+            background-color: #dc3545 !important; /* Тот же красный, что и футер */
+            position: fixed;
+            top: 90px; /* Подстраиваем под высоту верхней полосы */
+            width: 100%;
+            z-index: 1029;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .nav-center {
+            justify-content: center;
+        }
+
+            .nav-center .navbar-nav {
+                flex-direction: row;
+                gap: 25px;
+            }
+
+        .nav-link {
+            color: rgba(255,255,255,0.9) !important;
+            font-weight: 500;
+            padding: 8px 15px !important;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+            .nav-link:hover {
+                color: white !important;
+                background-color: rgba(255,255,255,0.15);
+                transform: translateY(-2px);
+            }
+
+            .nav-link.active {
+                background-color: rgba(255,255,255,0.2);
+                color: white !important;
+            }
+
+            /* Иконки в навигации */
+            .nav-link i {
+                margin-right: 8px;
+                font-size: 1.1em;
+            }
+
+        /* Отключаем синюю подсветку телефонов на iOS/Android */
+        a[href^="tel:"] {
+            color: inherit !important;
+            text-decoration: none !important;
+        }
+
+        /* Специально для футера - белые ссылки */
+        footer a[href^="tel:"],
+        footer a[href^="mailto:"] {
+            color: white !important;
+            text-decoration: none !important;
+        }
+
+        /* Адаптивность для мобильных */
+        @media (max-width: 992px) {
+            body {
+                padding-top: 160px;
+            }
+
+            .top-header {
+                padding: 8px 0;
+            }
+
+            .main-navigation {
+                top: 60px;
+            }
+
+            .nav-center .navbar-nav {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .logo-section {
+                justify-content: center;
+                margin-bottom: 10px;
+            }
+
+            .auth-section {
+                justify-content: center;
+            }
+        }
+
+        /* Стили для кнопок авторизации */
+        .btn-auth {
+            padding: 6px 15px;
+            font-size: 0.9em;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login {
+            border: 1px solid #3498db;
+            color: #3498db;
+            background-color: transparent;
+        }
+
+            .btn-login:hover {
+                background-color: #3498db;
+                color: white;
+            }
+
+        .btn-logout {
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            background-color: transparent;
+        }
+
+            .btn-logout:hover {
+                background-color: #e74c3c;
+                color: white;
+            }
+
+        .welcome-text {
+            color: #2c3e50;
+            font-weight: 500;
+            margin-right: 10px;
+        }
+
+        /* Простое вертикальное выравнивание */
+        .top-header .row {
+            align-items: center; /* Это ключевое свойство */
+            min-height: 70px; /* Минимальная высота строки */
+        }
+
+        .logo-section, .auth-section {
+            display: flex;
+            align-items: center; /* Выравнивание по вертикали внутри колонок */
+            height: 100%;
+        }
+
+        .auth-section {
+            justify-content: flex-end; /* Кнопки справа */
+        }
+
+        .body-content,
+        .body-content > .container,
+        .blog-container,
+        .newpost-container {
+            padding-top: 45px !important;
+            min-height: 70vh;
+            flex: 1;
+        }
+
+        .brand-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2px;
+        }
+
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-plus {
+            color: #2c3e50;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 14px;
+            line-height: 0;
+            text-shadow: 0 2px 3px rgba(231, 76, 60, 0.2);
+        }
+
+        .tagline {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        /* Стили для футера на всю ширину */
+        .full-width-footer {
+            width: 100%;
+            margin-top: auto;
+            background-color: #dc3545 !important;
+        }
+
+            /* Убираем горизонтальные отступы у футера */
+            .full-width-footer .container {
+                max-width: 100%;
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+
+        /* Убедимся, что body не имеет ограничений */
+        body, html {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Кнопки в красном стиле */
+        .btn-danger-custom {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+
+            .btn-danger-custom:hover {
+                background-color: #c82333;
+                border-color: #bd2130;
+                color: white;
+            }
+        /* Общие стили для блога */
+        .article-content h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            border-bottom: 2px solid #dc3545;
+            padding-bottom: 0.5rem;
+        }
+
+        .article-content h3 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid #dc3545;
+            padding-left: 1.5rem;
+            margin-left: 0;
+            font-style: italic;
+            color: #6c757d;
+        }
+
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 1.5rem;
+            }
+
+            .article-header {
+                padding: 30px 0;
+            }
+
+            .comments-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-md-12 mb-md-2">
+                    <div class="logo-section">
+                        <a href="/">
+                            <img src="{% static 'app/content/logo.jpg' %}" alt="Квартал+" width="55" height="55">
+                        </a>
+                        <div class="company-name">
+                            <div class="brand-title">
+                                <span class="brand-text">Квартал</span>
+                                <span class="brand-plus">+</span>
+                            </div>
+                            <small class="tagline text-danger fw-bold">Агентство недвижимости</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8 col-md-12">
+                    <!-- Кнопки авторизации -->
+                    <div class="auth-section justify-content-lg-end">
+                        {% if user.is_authenticated %}
+                        <span class="welcome-text">
+                            <i class="fas fa-user-circle"></i> Привет, {{ user.username }}!
+                        </span>
+                        <!-- Форма для выхода -->
+                        <form method="post" action="{% url 'logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger-custom btn-auth">
+                                <i class="fas fa-sign-out-alt"></i> Выйти
+                            </button>
+                        </form>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-danger-custom btn-auth">
+                            <i class="fas fa-sign-in-alt"></i> Войти
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основная навигация - КРАСНАЯ КАК ФУТЕР -->
+    <nav class="navbar navbar-expand-lg navbar-dark main-navigation">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse nav-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">
+                            <i class="fas fa-home"></i> Главная
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'catalog' %}">
+                            <i class="fas fa-building"></i> Каталог
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'services' %}">
+                            <i class="fas fa-handshake"></i> Услуги
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'team' %}">
+                            <i class="fas fa-users"></i> Команда
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">
+                            <i class="fas fa-info-circle"></i> О нас
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'contact' %}">
+                            <i class="fas fa-address-book"></i> Контакты
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'blog' %}">
+                            <i class="fas fa-newspaper"></i> Статьи
+                        </a>
+                    </li>
+                    {% if user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'newpost' %}">
+                            <i class="fas fa-plus-square"></i> Добавить статью
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'add_property' %}">
+                            <i class="fas fa-plus-circle"></i> Добавить объект
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контент В КОНТЕЙНЕРЕ -->
+    <div class="container body-content">
+        {% block content %}{% endblock %}
+    </div> <!-- Закрываем основной контейнер -->
+    <!-- ФУТЕР ВНЕ КОНТЕЙНЕРА на всю ширину - КРАСНЫЙ -->
+    <footer class="full-width-footer bg-danger text-white py-4 w-100 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Квартал+</h5>
+                    <p>Ваш надежный партнер в мире недвижимости</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Контакты</h5>
+                    <p>
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:+79922991529" class="text-white text-decoration-none">+7 (992) 299-15-29</a>
+                    </p>
+                    <p>
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:info@kvartal-plus.ru" class="text-white text-decoration-none">kvartalplus60@mail.ru</a>
+                    </p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <h5>Свяжитесь с нами</h5>
+                    <a href="{% url 'contact' %}#consultation" class="btn btn-outline-light btn-sm">
+                        <i class="fas fa-headset"></i> Бесплатная консультация
+                    </a>
+                    <div class="mt-2">
+                        <small><i class="fas fa-clock"></i> Работаем с 10:00 до 19:00</small>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-3" style="border-color: rgba(255,255,255,0.2);">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="mb-0">&copy; 2026 Агентство недвижимости Квартал+. Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

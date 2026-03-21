@@ -1,0 +1,273 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Бардовые цвета как на сайте */
+    .text-burgundy {
+        color: #78191A !important;
+    }
+
+    .bg-burgundy {
+        background-color: #78191A !important;
+    }
+
+    .border-burgundy {
+        border-color: #78191A !important;
+    }
+
+    /* Заголовок страницы */
+    .page-header {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .header-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #78191A;
+        margin: 0;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 15px;
+    }
+
+        .header-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: #78191A;
+            border-radius: 2px;
+        }
+
+    .page-subtitle {
+        text-align: center;
+        color: #666;
+        font-size: 1.1rem;
+        margin-bottom: 40px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Сетка команды */
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+        margin-top: 20px;
+    }
+
+    .team-card {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease;
+        height: 100%;
+        border: 1px solid #eee;
+        text-align: center;
+    }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+        }
+
+    .team-photo {
+        height: 400px;
+        width: 100%;
+        object-fit: cover;
+        border-bottom: 1px solid #eee;
+    }
+
+    .no-photo {
+        height: 400px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999;
+        border-bottom: 1px solid #eee;
+    }
+    .team-content {
+        padding: 20px;
+    }
+
+    .team-name {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .team-position {
+        color: #78191A;
+        font-weight: 500;
+        font-size: 0.95rem;
+        margin-bottom: 15px;
+    }
+
+    .team-info {
+        background: #f8f9fa;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 15px 0;
+        text-align: left;
+    }
+
+        .team-info p {
+            margin: 5px 0;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+    .team-contact {
+        color: #666;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+        .team-contact p {
+            margin: 5px 0;
+        }
+
+    .no-team {
+        text-align: center;
+        padding: 60px 20px;
+        color: #888;
+        background: #f9f9f9;
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .team-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .header-title {
+            font-size: 1.7rem;
+        }
+    }
+    /* Стили для кнопки аттестата */
+    .certificate-btn {
+        display: inline-block;
+        background-color: #78191A;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border: 1px solid #78191A;
+        margin-top: 15px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+        .certificate-btn:hover {
+            background-color: white;
+            color: #78191A;
+            border-color: #78191A;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .certificate-btn i {
+            margin-right: 8px;
+        }
+</style>
+
+<div class="container">
+    <!-- Заголовок страницы -->
+    <div class="page-header">
+        <h1 class="header-title">Наша команда</h1>
+    </div>
+
+    <p class="page-subtitle">
+        Профессиональные риелторы с многолетним опытом работы
+    </p>
+
+    <!-- Список команды -->
+    {% if team_members %}
+    <div class="team-grid">
+        {% for member in team_members %}
+        <div class="team-card">
+            <!-- Фото -->
+            <div>
+                {% if member.photo %}
+                <img src="{{ member.photo.url }}"
+                     class="team-photo"
+                     alt="{{ member.name }}">
+                {% else %}
+                <div class="no-photo">
+                    <i class="fas fa-user-tie fa-3x"></i>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Контент -->
+            <div class="team-content">
+                <h3 class="team-name">{{ member.name }}</h3>
+                <div class="team-position">{{ member.position }}</div>
+
+                <div class="team-info">
+                    <p>
+                        <i class="fas fa-briefcase"></i>
+                        Опыт:
+                        {% with exp=member.experience %}
+                        {% if exp|add:"-11"|divisibleby:100 and not exp|divisibleby:100 %}
+                        {{ exp }} лет
+                        {% elif exp|divisibleby:10 and not exp|divisibleby:100 %}
+                        {{ exp }} лет
+                        {% elif exp|add:"-1"|divisibleby:10 and not exp|divisibleby:100 %}
+                        {{ exp }} год
+                        {% elif exp|add:"-2"|divisibleby:10 or exp|add:"-3"|divisibleby:10 or exp|add:"-4"|divisibleby:10 %}
+                        {% if not exp|divisibleby:100 %}
+                        {{ exp }} года
+                        {% else %}
+                        {{ exp }} лет
+                        {% endif %}
+                        {% else %}
+                        {{ exp }} лет
+                        {% endif %}
+                        {% endwith %}
+                    </p>
+                    <p><i class="fas fa-handshake"></i> Сделок: {{ member.deals_completed }}+</p>
+                </div>
+
+                <div class="team-contact">
+                    <p><i class="fas fa-phone"></i> {{ member.phone }}</p>
+                    <p><i class="fas fa-envelope"></i> {{ member.email }}</p>
+                </div>
+
+                <!-- Кнопка аттестата -->
+                {% if member.certificate_link %}
+                <a href="{{ member.certificate_link }}"
+                   class="certificate-btn"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    <i class="fas fa-certificate"></i> Аттестат
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Состояние "нет команды" -->
+    <div class="no-team">
+        <i class="fas fa-users fa-3x mb-3"></i>
+        <h3>Информация о команде скоро появится</h3>
+        <p>Наши специалисты скоро будут представлены здесь</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

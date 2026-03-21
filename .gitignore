@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+env/
+
+# Django
+*.log
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+media/
+
+# Секреты
+.env
+.env.local
+secrets.env
+
+# IDE
+.vs/
+.idea/
+.vscode/
+*.pyproj
+*.pyproj.user
+obj/
+
+# Временные
+.DS_Store
+*.swp

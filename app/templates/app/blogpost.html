@@ -1,0 +1,318 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    .article-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .article-header {
+        margin-bottom: 30px;
+    }
+
+    /* Бардовый заголовок */
+    .article-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        line-height: 1.3;
+        margin-bottom: 10px;
+        color: #8b0000; /* Бардовый цвет */
+    }
+
+    .article-meta {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 25px;
+        display: flex;
+        gap: 20px;
+    }
+
+        .article-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+    .article-image {
+        width: 100%;
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: 6px;
+        margin-bottom: 25px;
+    }
+
+    .article-content {
+        line-height: 1.7;
+        color: #444;
+        font-size: 1.05rem;
+        margin-bottom: 40px;
+    }
+
+        .article-content p {
+            margin-bottom: 1.2em;
+        }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        color: #666;
+        text-decoration: none;
+        font-size: 0.95rem;
+        margin-bottom: 30px;
+    }
+
+        .back-link:hover {
+            color: #8b0000; /* Бардовый при наведении */
+        }
+
+    /* Улучшенная форма комментариев */
+    .comments-section {
+        border-top: 1px solid #eee;
+        padding-top: 30px;
+        margin-top: 40px;
+    }
+
+    .comments-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 25px;
+        color: #333;
+    }
+
+    /* Обертка для формы */
+    .comment-form-wrapper {
+        background: #f9f9f9;
+        padding: 25px;
+        border-radius: 8px;
+        margin-bottom: 40px;
+        border: 1px solid #eee;
+    }
+
+        /* Поле ввода - ШИРОКОЕ */
+        .comment-form-wrapper textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 120px;
+            margin-bottom: 0;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+    /* Контейнер для кнопки (правый нижний угол) */
+    .form-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 15px;
+        position: relative;
+    }
+
+    /* Кнопка отправки */
+    .submit-comment-btn {
+        background: #8b0000; /* Бардовый цвет */
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: background 0.2s;
+    }
+
+        .submit-comment-btn:hover {
+            background: #6b0000; /* Темнее при наведении */
+        }
+
+    .auth-message {
+        background: #fff5f5;
+        padding: 15px;
+        border-radius: 6px;
+        margin-bottom: 25px;
+        font-size: 0.95rem;
+        border-left: 4px solid #8b0000;
+    }
+
+        .auth-message a {
+            color: #8b0000;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+            .auth-message a:hover {
+                text-decoration: underline;
+            }
+
+    /* Список комментариев */
+    .comments-list {
+        margin-top: 25px;
+    }
+
+    .comment {
+        background: white;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+        .comment:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #8b0000;
+            border-radius: 4px 0 0 4px;
+        }
+
+    .comment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .comment-author {
+        font-weight: 600;
+        color: #333;
+        font-size: 1rem;
+    }
+
+    .comment-date {
+        color: #888;
+        font-size: 0.85rem;
+    }
+
+    .comment-text {
+        color: #555;
+        line-height: 1.5;
+        font-size: 0.95rem;
+    }
+
+    .no-comments {
+        color: #888;
+        text-align: center;
+        padding: 30px;
+        font-style: italic;
+        background: #f9f9f9;
+        border-radius: 8px;
+    }
+
+    @media (max-width: 768px) {
+        .article-title {
+            font-size: 1.5rem;
+        }
+
+        .article-meta {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .article-container {
+            padding: 0 15px;
+        }
+
+        .comment-form-wrapper {
+            padding: 20px;
+        }
+
+        .form-footer {
+            justify-content: center;
+        }
+
+        .submit-comment-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="container">
+    <!-- Кнопка назад -->
+    <a href="{% url 'blog' %}" class="back-link">
+        <i class="fas fa-arrow-left me-2"></i> Все статьи
+    </a>
+
+    <div class="article-container">
+        <!-- Заголовок статьи -->
+        <div class="article-header">
+            <h1 class="article-title">{{ post_1.title }}</h1>
+            <div class="article-meta">
+                <span>
+                    <i class="far fa-calendar"></i>
+                    {{ post_1.posted|date:"d.m.Y" }}
+                </span>
+                <span>
+                    <i class="far fa-comment"></i>
+                    {{ comments|length }} комментариев
+                </span>
+            </div>
+        </div>
+
+        <!-- Изображение -->
+        {% if post_1.image and post_1.image.url != '/media/temp.jpg' %}
+        <img src="{{ post_1.image.url }}"
+             alt="{{ post_1.title }}"
+             class="article-image">
+        {% endif %}
+
+        <!-- Контент -->
+        <div class="article-content">
+            {{ post_1.content|linebreaksbr }}
+        </div>
+
+        <!-- Комментарии -->
+        <div class="comments-section">
+            <h3 class="comments-title">Комментарии</h3>
+
+            <!-- Форма комментария -->
+            {% if user.is_authenticated %}
+            <div class="comment-form-wrapper">
+                <form method="POST">
+                    {% csrf_token %}
+                    <textarea name="text"
+                              placeholder="Напишите ваш комментарий здесь..."
+                              required></textarea>
+                    <div class="form-footer">
+                        <button type="submit" class="submit-comment-btn">
+                            Отправить комментарий
+                        </button>
+                    </div>
+                </form>
+            </div>
+            {% else %}
+            <div class="auth-message">
+                <a href="{% url 'login' %}">Авторизуйтесь</a>, чтобы оставить комментарий
+            </div>
+            {% endif %}
+
+            <!-- Список комментариев -->
+            <div class="comments-list">
+                {% for comment in comments %}
+                <div class="comment">
+                    <div class="comment-header">
+                        <div class="comment-author">{{ comment.author }}</div>
+                        <div class="comment-date">{{ comment.date|date:"d.m.Y H:i" }}</div>
+                    </div>
+                    <div class="comment-text">
+                        {{ comment.text|linebreaksbr }}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="no-comments">
+                    Пока нет комментариев. Будьте первым!
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

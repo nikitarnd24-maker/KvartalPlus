@@ -1,0 +1,420 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Общие стили */
+    .text-burgundy {
+        color: #78191A !important;
+    }
+
+    .bg-burgundy {
+        background-color: #78191A !important;
+    }
+
+    .border-burgundy {
+        border-color: #78191A !important;
+    }
+
+    .btn-burgundy {
+        background-color: #78191A !important;
+        border-color: #78191A !important;
+        color: white !important;
+        transition: all 0.3s ease;
+    }
+
+        .btn-burgundy:hover {
+            background-color: #5a1314 !important;
+            border-color: #5a1314 !important;
+            transform: translateY(-2px);
+        }
+
+    .btn-outline-burgundy {
+        border: 2px solid #78191A !important;
+        color: #78191A !important;
+        background-color: transparent !important;
+        transition: all 0.3s ease;
+    }
+
+        .btn-outline-burgundy:hover {
+            background-color: #78191A !important;
+            color: white !important;
+        }
+
+    /* Заголовок страницы в едином стиле */
+    .page-header {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .header-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #78191A;
+        margin: 0;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 15px;
+    }
+
+        .header-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: #78191A;
+            border-radius: 2px;
+        }
+
+    .page-subtitle {
+        text-align: center;
+        color: #666;
+        font-size: 1.1rem;
+        margin-bottom: 40px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .contact-item {
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+        .contact-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+    .card {
+        border: none;
+        transition: transform 0.3s ease;
+        border-radius: 12px !important;
+    }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+        }
+
+    .contact-icon {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        margin: 0 auto 20px;
+        font-size: 24px;
+    }
+
+    .team-card {
+        border-top: 4px solid #78191A;
+    }
+
+    @media (max-width: 768px) {
+        .display-5 {
+            font-size: 2rem;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+        }
+
+        .header-title {
+            font-size: 1.7rem;
+        }
+    }
+</style>
+
+<div class="container">
+    <!-- Заголовок в едином стиле -->
+    <div class="page-header">
+        <h1 class="header-title">Контакты</h1>
+    </div>
+
+    <p class="page-subtitle">
+        Мы всегда на связи и готовы помочь вам с выбором недвижимости
+    </p>
+
+    <!-- Основная информация -->
+    <div class="row mb-5">
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4 overflow-hidden">
+                <div class="card-body p-0">
+                    <div id="map" style="height: 400px; width: 100%;"></div>
+                </div>
+                <div class="card-footer bg-light">
+                    <small class="text-muted"><i class="fas fa-info-circle me-1"></i> Нажмите на метку для подробной информации</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <!-- Контактная информация -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-burgundy text-white">
+                    <h5 class="mb-0"><i class="fas fa-phone-alt me-2"></i> Свяжитесь с нами</h5>
+                </div>
+                <div class="card-body">
+                    <div class="contact-item mb-3">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-burgundy text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                                 style="width: 40px; height: 40px; flex-shrink: 0;">
+                                <i class="fas fa-phone" style="font-size: 16px;"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-burgundy">Телефон</div>
+                                <div class="fs-5 fw-bold">+7 (992) 299-15-29</div>
+                                <small class="text-muted">Ежедневно с 10:00 до 18:00</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-item mb-3">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-burgundy text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                                 style="width: 40px; height: 40px; flex-shrink: 0;">
+                                <i class="fas fa-envelope" style="font-size: 16px;"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-burgundy">Email</div>
+                                <div class="fs-6 fw-bold">info@kvartal-plus.ru</div>
+                                <small class="text-muted">Отвечаем в течение 2 часов</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-item mb-3">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-burgundy text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                                 style="width: 40px; height: 40px; flex-shrink: 0;">
+                                <i class="fas fa-map-marker-alt" style="font-size: 16px;"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-burgundy">Адрес офиса</div>
+                                <div class="fs-6 fw-bold">г. Псков, ул. Владимирская, 3в</div>
+                                <small class="text-muted">Центральный район, удобная парковка</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-burgundy text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                                 style="width: 40px; height: 40px; flex-shrink: 0;">
+                                <i class="fas fa-clock" style="font-size: 16px;"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-burgundy">График работы</div>
+                                <div class="fs-6">Пн-Пт: 10:00-19:00</div>
+                                <div class="fs-6">Сб-Вс: 11:00-19:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Форма обратной связи -->
+    <div class="row mb-5" id="consultation">
+        <div class="col-12">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-burgundy text-white">
+                    <h5 class="mb-0"><i class="fas fa-headset me-2"></i> Быстрая консультация</h5>
+                </div>
+                <div class="card-body p-4">
+                    {% if success %}
+                    <div class="alert alert-success border-0">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <i class="fas fa-check-circle fa-2x"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1">✅ Спасибо за заявку!</h5>
+                                <p class="mb-0">Мы свяжемся с вами в течение 15 минут</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <p class="text-muted mb-4 text-center">
+                        <i class="fas fa-clock me-1"></i> Оставьте заявку и мы перезвоним вам в течение 15 минут
+                    </p>
+
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-burgundy fw-bold">Ваше имя *</label>
+                                <input type="text"
+                                       name="name"
+                                       class="form-control"
+                                       placeholder="Иванов Иван"
+                                       required>
+                                <div class="invalid-feedback">
+                                    Пожалуйста, введите ваше имя
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-burgundy fw-bold">Ваш телефон *</label>
+                                <input type="tel"
+                                       name="phone"
+                                       class="form-control"
+                                       placeholder="+7 (999) 123-45-67"
+                                       required>
+                                <div class="invalid-feedback">
+                                    Пожалуйста, введите ваш телефон
+                                </div>
+                            </div>
+                            <div class="col-12 mb-4">
+                                <label class="form-label text-burgundy fw-bold">Ваш вопрос или комментарий</label>
+                                <textarea name="message"
+                                          class="form-control"
+                                          rows="4"
+                                          placeholder="Расскажите о вашей задаче..."></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-burgundy btn-lg w-100 py-3 fw-bold">
+                                    <i class="fas fa-headset me-2"></i> Получить бесплатную консультацию
+                                </button>
+                                <p class="text-center text-muted mt-3 mb-0">
+                                    <small><i class="fas fa-lock me-1"></i> Ваши данные защищены и не будут переданы третьим лицам</small>
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Дополнительные способы связи -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center py-4">
+                    <h3 class="text-burgundy mb-4">
+                        <i class="fas fa-share-alt me-2"></i> Другие способы связи
+                    </h3>
+                    <p class="text-muted mb-4">Свяжитесь с нами удобным для вас способом</p>
+
+                    <div class="d-flex justify-content-center gap-4 flex-wrap">
+                        <!-- Telegram -->
+                        <a href="https://t.me/PSKvartalPlus"
+                           target="_blank"
+                           class="btn btn-outline-burgundy d-flex align-items-center px-5 py-3"
+                           style="border-width: 2px; border-radius: 10px;">
+                            <div class="me-3">
+                                <i class="fab fa-telegram fa-2x"></i>
+                            </div>
+                            <div class="text-start">
+                                <div class="fw-bold fs-5">Telegram</div>
+                                <small class="text-muted">Мгновенная связь</small>
+                            </div>
+                        </a>
+
+                        <!-- ВКонтакте -->
+                        <a href="https://vk.com/kvartal.plus"
+                           target="_blank"
+                           class="btn btn-outline-burgundy d-flex align-items-center px-4 py-3"
+                           style="border-width: 2px; border-radius: 10px;">
+                            <div class="me-2">
+                                <i class="fab fa-vk fa-2x" style="transform: scale(0.9);"></i>
+                            </div>
+                            <div class="text-start">
+                                <div class="fw-bold" style="font-size: 1.1rem;">ВКонтакте</div>
+                                <small class="text-muted">Новости и акции</small>
+                            </div>
+                        </a>
+
+                        <!-- WhatsApp -->
+                        <a href="https://wa.me/message/WHASV2SDW4MRE1"
+                           target="_blank"
+                           class="btn btn-outline-burgundy d-flex align-items-center px-3 py-2"
+                           style="border-width: 2px; border-radius: 10px;">
+                            <div class="me-2">
+                                <i class="fab fa-whatsapp fa-2x" style="transform: scale(0.8);"></i>
+                            </div>
+                            <div class="text-start">
+                                <div class="fw-bold" style="font-size: 1rem;">WhatsApp</div>
+                                <small class="text-muted">Быстрые сообщения</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- СКРИПТЫ ПЕРЕНЕС СЮДА - ВНУТРЬ BLOCK CONTENT, НО ПОСЛЕ ВСЕГО КОНТЕНТА -->
+<script src="https://api-maps.yandex.ru/2.1/?apikey=ваш_api_ключ&lang=ru_RU" type="text/javascript"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Инициализация карты
+        ymaps.ready(init);
+
+        function init() {
+            // Создаем карту
+            var myMap = new ymaps.Map("map", {
+                center: [57.823940, 28.283900],
+                zoom: 16,
+                controls: ['zoomControl', 'fullscreenControl']
+            });
+
+            // Создаем метку с кастомной иконкой
+            var myPlacemark = new ymaps.Placemark([57.823940, 28.283900], {
+                balloonContentHeader: '<strong>Агентство недвижимости "Квартал+"</strong>',
+                balloonContentBody: '<p>📌 <strong>Адрес:</strong> г. Псков, ул. Владимирская, 3в</p>' +
+                    '<p>📞 <strong>Телефон:</strong> +7 (992) 299-15-29</p>' +
+                    '<p>🕐 <strong>График работы:</strong> Пн-Пт 10:00-18:00, Сб-Вс 11:00-18:00</p>',
+                balloonContentFooter: '<em>Ждем вас в нашем офисе!</em>',
+                hintContent: 'Квартал+ - Агентство недвижимости'
+            }, {
+                preset: 'islands#redDotIcon'
+            });
+
+            myMap.geoObjects.add(myPlacemark);
+            myPlacemark.balloon.open();
+        }
+
+        // Плавный скролл к форме консультации при наличии якоря
+        if (window.location.hash === '#consultation') {
+            setTimeout(function () {
+                const element = document.getElementById('consultation');
+                if (element) {
+                    element.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+
+                    element.style.transition = 'all 0.5s';
+                    element.style.boxShadow = '0 0 30px rgba(120, 25, 26, 0.3)';
+                    setTimeout(function () {
+                        element.style.boxShadow = 'none';
+                    }, 2000);
+                }
+            }, 300);
+        }
+
+        // Валидация формы
+        var form = document.querySelector('.needs-validation');
+        if (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        }
+    });
+</script>
+{% endblock %}

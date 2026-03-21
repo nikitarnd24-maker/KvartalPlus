@@ -1,0 +1,233 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Бардовые цвета как в about.html */
+    .text-burgundy {
+        color: #78191A !important;
+    }
+
+    .bg-burgundy {
+        background-color: #78191A !important;
+    }
+
+    .border-burgundy {
+        border-color: #78191A !important;
+    }
+
+    /* Стили заголовка как в about.html */
+    .page-header {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .header-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #78191A;
+        margin: 0;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 15px;
+    }
+
+        .header-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: #78191A;
+            border-radius: 2px;
+        }
+
+    .page-subtitle {
+        text-align: center;
+        color: #666;
+        font-size: 1.1rem;
+        margin-bottom: 40px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Сетка статей */
+    .articles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+        margin-top: 20px;
+    }
+
+    .article-card {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: transform 0.2s ease;
+        height: 100%;
+        border: 1px solid #eee;
+    }
+
+        .article-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+    .article-image {
+        height: 180px;
+        width: 100%;
+        object-fit: cover;
+        border-bottom: 1px solid #eee;
+    }
+
+    .no-image {
+        height: 180px;
+        background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999;
+        border-bottom: 1px solid #eee;
+    }
+
+    .article-content {
+        padding: 20px;
+    }
+
+    .article-date {
+        color: #888;
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .article-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        line-height: 1.4;
+    }
+
+        .article-title a {
+            color: #333;
+            text-decoration: none;
+        }
+
+            .article-title a:hover {
+                color: #78191A; /* Бардовый при наведении */
+            }
+
+    .article-excerpt {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 15px;
+    }
+
+    .read-more {
+        color: #78191A; /* Бардовый цвет */
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+
+        .read-more:hover {
+            color: #5a1314; /* Темнее при наведении */
+        }
+
+    .no-articles {
+        text-align: center;
+        padding: 60px 20px;
+        color: #888;
+        background: #f9f9f9;
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .articles-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .header-title {
+            font-size: 1.7rem;
+        }
+    }
+</style>
+
+<div class="container">
+    <!-- Заголовок страницы в стиле about.html (без иконки) -->
+    <div class="page-header">
+        <h1 class="header-title">Статьи о недвижимости</h1>
+    </div>
+
+    <p class="page-subtitle">
+        Полезные материалы от экспертов
+    </p>
+
+    <!-- Список статей -->
+    {% if posts %}
+    <div class="articles-grid">
+        {% for post in posts %}
+        <div class="article-card">
+            <!-- Изображение -->
+            <div>
+                {% if post.image and post.image.url != '/media/temp.jpg' %}
+                <img src="{{ post.image.url }}"
+                     class="article-image"
+                     alt="{{ post.title }}">
+                {% else %}
+                <div class="no-image">
+                    <i class="fas fa-newspaper fa-2x"></i>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Контент -->
+            <div class="article-content">
+                <div class="article-date">
+                    <i class="far fa-calendar"></i>
+                    {{ post.posted|date:"d.m.Y" }}
+                </div>
+
+                <h3 class="article-title">
+                    <a href="{% url 'blogpost' parametr=post.id %}">
+                        {{ post.title }}
+                    </a>
+                </h3>
+
+                <p class="article-excerpt">
+                    {{ post.description|truncatechars:120 }}
+                </p>
+
+                <a href="{% url 'blogpost' parametr=post.id %}" class="read-more">
+                    Читать статью →
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Состояние "нет статей" -->
+    <div class="no-articles">
+        <i class="far fa-newspaper fa-3x mb-3"></i>
+        <h3>Статьи скоро появятся</h3>
+        <p>Мы готовим полезные материалы</p>
+        {% if user.is_superuser %}
+        <a href="{% url 'newpost' %}" class="btn btn-sm btn-outline-danger mt-2" style="border-color: #78191A; color: #78191A;">
+            Добавить статью
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
